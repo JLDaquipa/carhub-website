@@ -1,6 +1,7 @@
 import Image from "next/image";
-import { Hero,SearchBar,CustomFilter,CarCard } from "@/components";
+import { Hero,SearchBar,CustomFilter,CarCard, ShowMore } from "@/components";
 import { fetchCars } from "@/utils";
+import { fuels, yearsOfProduction } from "@/constants";
 
 export default async function Home({searchParams}:any) {
   const cars = await fetchCars({
@@ -28,8 +29,8 @@ export default async function Home({searchParams}:any) {
         <div className="home__filters">
           <SearchBar />
           <div className="home__filter-container">
-            <CustomFilter title="fuel"/>
-            <CustomFilter title="year"/>
+            <CustomFilter title="fuel" options={fuels}/>
+            <CustomFilter title="year" options={yearsOfProduction}/>
           </div>
         </div>
 
@@ -44,6 +45,10 @@ export default async function Home({searchParams}:any) {
                     ))
                   }
                 </div>
+                <ShowMore 
+                  pageNumber={(searchParams.pageNumber || 10) / 10}
+                  isNext={(searchParams.limit || 10) > cars.length}
+                />
               </section>
             )
           : (
